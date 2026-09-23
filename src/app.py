@@ -20,8 +20,8 @@ class App:
         self.canvas = tk.Canvas(self.root, width=width, height=height-50, bg="white", highlightthickness=0)
         self.canvas.pack(fill=tk.BOTH, expand=True)
 
-        self.model = GridModel(55, 70) # Больше клеток, как на видео
-        self.renderer = Renderer(self.canvas, cell_size=12) # Размер клетки меньше
+        self.model = GridModel(55, 70)
+        self.renderer = Renderer(self.canvas, cell_size=12)
         
         self.algo_generator = None
         self.renderer.render(self.model)
@@ -51,7 +51,8 @@ class App:
             try:
                 next(self.algo_generator)
                 self.renderer.render(self.model)
-                self.root.after(1, self.update_loop) # Минимальная задержка для быстрой анимации
+                # Увеличили задержку до 25 мс для спокойного наблюдения
+                self.root.after(25, self.update_loop) 
             except StopIteration:
                 self.algo_generator = None
                 self.renderer.render(self.model)

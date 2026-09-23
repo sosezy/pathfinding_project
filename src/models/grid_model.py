@@ -44,7 +44,6 @@ class GridModel:
         self.is_finished = False
 
     def get_neighbors(self, r, c):
-        # 8 направлений для диагонального движения как на видео
         neighbors = []
         dirs = [(-1,0), (1,0), (0,-1), (0,1), (-1,-1), (-1,1), (1,-1), (1,1)]
         for dr, dc in dirs:
@@ -55,10 +54,9 @@ class GridModel:
 
     def heuristic(self, a, b, algo_type):
         if algo_type == "Dijkstra": return 0
-        return math.hypot(a[0] - b[0], a[1] - b[1]) # Евклидово расстояние
+        return math.hypot(a[0] - b[0], a[1] - b[1])
 
     def get_current_path(self):
-        # Реконструкция пути от текущей проверяемой точки (эффект дрожания)
         if self.is_finished:
             return self.final_path
         if not self.current_node:
@@ -82,7 +80,6 @@ class GridModel:
         f_score = {self.start: self.heuristic(self.start, self.end, algo_type)}
         open_set_hash = {self.start}
 
-        iterations = 0
         while open_set:
             current = heapq.heappop(open_set)[2]
             open_set_hash.remove(current)
@@ -111,6 +108,5 @@ class GridModel:
                         open_set_hash.add(neighbor)
                         self.frontier.add(neighbor)
             
-            iterations += 1
-            if iterations % 2 == 0: # Сдаем управление UI каждые 2 шага для плавности
-                yield False
+            # Убрали пропуск кадров, теперь каждый шаг отрисовывается
+            yield False
